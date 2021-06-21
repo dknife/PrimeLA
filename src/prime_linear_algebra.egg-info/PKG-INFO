@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: prime-linear-algebra
+Version: 0.0.3
+Summary: A small linear algebra package
+Home-page: https://github.com/dknife
+Author: dknife
+Author-email: young.min.kang@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/dknife
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Linear Algebra Visualization
+
+This is a simple preliminary package for visualization of vectors (2d and 3d) and matrix (22, 33)
+
+Author: Young-Min Kang
+
+
+
