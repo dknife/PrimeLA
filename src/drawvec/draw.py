@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 # 특정 서브플롯 axis에 벡터 v를 시작점 start에서 출발하도록 그림
 # 화살표의 폭, 머리의 크기, 화살표 색상을 지정하고 선 스타일은 ls로 지정 가능
 def draw_vector(axis, v, start = (0,0), 
                 width = 1, headsize=0.3, color='k', ls='-'):
    
-    # 인자에 따라 적절한 화살표를 그린다. 
+    # 인자에 따라 적절한 화살표를 그린다.
+    s = np.array(start)
     axis.arrow(start[0], start[1],
                v[0], v[1],
                linewidth = width, 
@@ -16,19 +18,18 @@ def draw_vector(axis, v, start = (0,0),
 
 
 def draw_vector3d(axis, v, start = (0,0,0) , color='k', ls='-', arrow=True):
+    s = np.array(start)
     if arrow == True:
-        axis.quiver(start[0], start[1], start[2],
+        axis.quiver(s[0], s[1], s[2],
                     v[0], v[1], v[2], color=color, ls=ls)
     else:
-        axis.plot([start[0], v[0]+start[0]],
-                  [start[1], v[1]+start[1]],
-                  [start[2],v[2]+start[2]], color=color, ls=ls)
+        axis.plot([s[0], v[0]+s[0]],
+                  [s[1], v[1]+s[1]],
+                  [s[2], v[2]+s[2]], color=color, ls=ls)
 
 
 
-def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10)) :
-
-
+def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10), linked=False) :
     if vector_list != None and len( vector_list) > 0:
         if len(vector_list) != len(color_list) :
             if len(color_list) > 0:
@@ -38,33 +39,39 @@ def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10))
         else:
              colors = color_list
     dim = len(vector_list[0])
-    print(dim)
     # figure and axis preparation
-    
-    flatten_numbers = np.array(vector_list).flatten()
-    minvalue = flatten_numbers.min()
-    maxvalue = flatten_numbers.max()
-    d = maxvalue - minvalue
-    minvalue -= d*0.25
-    maxvalue += d*0.25
+
+    vecsum = np.zeros_like(vector_list[0])
+    for v in vector_list:
+        vecsum += v
+    maxvalue = max(abs(vecsum.min()), abs(vecsum.max()))
 
     if dim == 2:
+        s = np.array([start[0], start[1]], dtype=float)
+
         fig, ax = plt.subplots(figsize=figsize)
-        ax.set_xlim([minvalue, maxvalue])
-        ax.set_ylim([minvalue, maxvalue])
-        ax.grid(True)
-        for v, c in zip(vector_list, colors):            
-            draw_vector(ax, v, color=c, start=start)
-        plt.show()
-    if dim == 3:
-        fig = plt.figure(figsize = figsize)   # figure 크기를 결정
-        ax = fig.gca(projection='3d')  
-        ax.set_xlim([minvalue, maxvalue])
-        ax.set_ylim([minvalue, maxvalue])
-        ax.set_zlim([minvalue, maxvalue])
+        ax.set_xlim([-maxvalue, maxvalue])
+        ax.set_ylim([-maxvalue, maxvalue])
         ax.grid(True)
         for v, c in zip(vector_list, colors):
-            draw_vector3d(ax, v, color=c, start=start)
+            draw_vector(ax, v, color=c, start=s)
+            if linked: s += v
+        if linked:
+            draw_vector(ax, s, color='k', ls='--', headsize=0.0)
+        plt.show()
+    if dim == 3:
+        s = np.array([start[0], start[1], start[2]], dtype=float)
+        fig = plt.figure(figsize = figsize)   # figure 크기를 결정
+        ax = fig.gca(projection='3d')
+        ax.set_xlim([-maxvalue, maxvalue])
+        ax.set_ylim([-maxvalue, maxvalue])
+        ax.set_zlim([-maxvalue, maxvalue])
+        ax.grid(True)
+        for v, c in zip(vector_list, colors):
+            draw_vector3d(ax, v, color=c, start=s)
+            if linked: s += v
+        if linked:
+            draw_vector3d(ax, s, color='k', ls='--', arrow=False)
         plt.show()
 
 def draw_matrix(mat, figsize=(10, 10)):
