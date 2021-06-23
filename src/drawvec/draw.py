@@ -28,8 +28,16 @@ def draw_vector3d(axis, v, start = (0,0,0) , color='k', ls='-', arrow=True):
                   [s[2], v[2]+s[2]], color=color, ls=ls)
 
 
+def draw_line(axis, start, end, color='k', ls='-'):
+    if len(start) == 2:
+        axis.plot([start[0], end[0]],
+                  [start[1], end[1]], color=color, ls=ls)
+    elif len(start) == 3:
+        axis.plot([start[0], end[0]],
+                  [start[1], end[1]],
+                  [start[2], end[2]], color=color, ls=ls)
 
-def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10), linked=False) :
+def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10), linked=False, axis=None) :
     if vector_list != None and len( vector_list) > 0:
         if len(vector_list) != len(color_list) :
             if len(color_list) > 0:
@@ -44,37 +52,37 @@ def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10),
     vecsum = np.zeros_like(vector_list[0])
     for v in vector_list:
         vecsum += v
-    maxvalue = max(abs(vecsum.min()), abs(vecsum.max()))
+    maxvalue = max(abs(vecsum.min()), abs(vecsum.max())) * 1.1
 
     if dim == 2:
         s = np.array([start[0], start[1]], dtype=float)
-
-        fig, ax = plt.subplots(figsize=figsize)
-        ax.set_xlim([-maxvalue, maxvalue])
-        ax.set_ylim([-maxvalue, maxvalue])
-        ax.grid(True)
+        if axis == None:
+            ax = createAxis2d(-maxvalue, maxvalue, figsize)
+        else:
+            ax = axis
         for v, c in zip(vector_list, colors):
             draw_vector(ax, v, color=c, start=s)
             if linked: s += v
         if linked:
             draw_vector(ax, s, color='k', ls='--', headsize=0.0)
-        plt.show()
+        if axis == None:
+            plt.show()
     if dim == 3:
         s = np.array([start[0], start[1], start[2]], dtype=float)
-        fig = plt.figure(figsize = figsize)   # figure 크기를 결정
-        ax = fig.gca(projection='3d')
-        ax.set_xlim([-maxvalue, maxvalue])
-        ax.set_ylim([-maxvalue, maxvalue])
-        ax.set_zlim([-maxvalue, maxvalue])
-        ax.grid(True)
+        if axis == None:
+            ax = createAxis3d(-maxvalue, maxvalue, figsize)
+
+        else:
+            ax = axis
         for v, c in zip(vector_list, colors):
             draw_vector3d(ax, v, color=c, start=s)
             if linked: s += v
         if linked:
             draw_vector3d(ax, s, color='k', ls='--', arrow=False)
-        plt.show()
+        if axis == None:
+            plt.show()
 
-def draw_matrix(mat, figsize=(10, 10)):
+def draw_matrix(mat, figsize=(10, 10), axis = None):
     cols = mat.shape[1]
     color = ['r', 'g', 'b' ]
     vectors = []
@@ -93,12 +101,10 @@ def draw_matrix(mat, figsize=(10, 10)):
     maxvalue += d*0.25
     
     if dim == 2:
-        fig, ax = plt.subplots(figsize=figsize)
-        ax.set_xlim([minvalue, maxvalue])
-        ax.set_ylim([minvalue, maxvalue])
-        ax.set_xlabel('$x$')
-        ax.set_ylabel('$y$')
-        ax.grid(True)
+        if axis == None:
+            ax = createAxis2d(-maxvalue, maxvalue, figsize)
+        else:
+            ax = axis
         u = vectors[0]
         v = vectors[1]
         for vec, c in zip(vectors, colors):            
@@ -106,18 +112,13 @@ def draw_matrix(mat, figsize=(10, 10)):
         vectors = [-u,-v]
         for vec, c in zip(vectors, colors):
             draw_vector(ax, vec, start=u+v, color='gray', ls='--', headsize=0)
-        plt.show()
+        if axis==None: plt.show()
         
     if dim == 3:
-        fig = plt.figure(figsize = figsize)   # figure 크기를 결정
-        ax = fig.gca(projection='3d')  
-        ax.set_xlim([minvalue, maxvalue])
-        ax.set_ylim([minvalue, maxvalue])
-        ax.set_zlim([minvalue, maxvalue])
-        ax.set_xlabel('$x$')
-        ax.set_ylabel('$y$')
-        ax.set_zlabel('$z$')
-        ax.grid(True)
+        if axis == None:
+            ax = createAxis3d(-maxvalue, maxvalue, figsize)
+        else:
+            ax = axis
         u = vectors[0]
         v = vectors[1]
         w = vectors[2]
@@ -133,4 +134,28 @@ def draw_matrix(mat, figsize=(10, 10)):
         vectors = [u, -v,-w]
         for vec, c in zip(vectors, colors):
             draw_vector3d(ax, vec, start=v+w, color='gray', ls='--', arrow=False)
-        plt.show()
+        if axis==None: plt.show()
+
+
+def createAxis2d(minvalue, maxvalue, figsize=(10,10)):
+
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.set_xlim([minvalue, maxvalue])
+    ax.set_ylim([minvalue, maxvalue])
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$y$')
+    ax.grid(True)
+    return ax
+
+def createAxis3d(minvalue, maxvalue, figsize=(10,10)):
+
+    fig = plt.figure(figsize = figsize)   # figure 크기를 결정
+    ax = fig.gca(projection='3d')
+    ax.set_xlim([minvalue, maxvalue])
+    ax.set_ylim([minvalue, maxvalue])
+    ax.set_zlim([minvalue, maxvalue])
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$y$')
+    ax.set_zlabel('$z$')
+    ax.grid(True)
+    return ax
