@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 import importlib.util
 spec = importlib.util.spec_from_file_location("draw", "../src/drawvec/draw.py")
@@ -35,6 +36,27 @@ draw.draw_vectors([u, v, w, 2*u, 2*v, w/2, 3*u, 3*v,
                    w/3, 4*u, 4*v, w/4], color_list=['r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b' ], axis=ax)
 
 draw.draw_line(ax, [0,0,0], [5, 5, 0], ls=':')
+
+plt.show()
+
+
+ax = draw.createAxis2d(-1.1, 7, figsize=(15,5))
+
+n_steps = 100
+step = 3.141592*2/n_steps
+ax.set_xlabel('$theta$')
+
+xs = []
+ys = []
+x = 0
+for _ in range(n_steps):
+
+    y = math.cos(x)
+    xs.append(x)
+    ys.append(y)
+    x += step
+
+ax.plot(xs, ys)
 
 plt.show()
 

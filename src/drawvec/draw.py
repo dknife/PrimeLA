@@ -9,6 +9,8 @@ def draw_vector(axis, v, start = (0,0),
    
     # 인자에 따라 적절한 화살표를 그린다.
     s = np.array(start)
+    if headsize > 0:
+        headsize = np.linalg.norm(v)/15
     axis.arrow(start[0], start[1],
                v[0], v[1],
                linewidth = width, 
