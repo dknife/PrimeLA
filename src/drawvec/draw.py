@@ -139,25 +139,55 @@ def draw_matrix(mat, figsize=(10, 10), axis = None):
         if axis==None: plt.show()
 
 
-def createAxis2d(minvalue, maxvalue, figsize=(10,10)):
+def createAxis2d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
 
-    fig, ax = plt.subplots(figsize=figsize)
-    ax.set_xlim([minvalue, maxvalue])
-    ax.set_ylim([minvalue, maxvalue])
-    ax.set_xlabel('$x$')
-    ax.set_ylabel('$y$')
-    ax.grid(True)
-    return ax
+    if subplot == (1,1):
+        fig, ax = plt.subplots(figsize=figsize)
+        ax.set_xlim([minvalue, maxvalue])
+        ax.set_ylim([minvalue, maxvalue])
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$y$')
+        ax.grid(True)
+        return ax
+    else:
+        fig, ax = plt.subplots(subplot[0], subplot[1], figsize=figsize)  # figure 크기를 결정
+        i = 1
+        for row in range(subplot[0]):
+            for col in range(subplot[1]):
+                ax[row, col].set_xlim([minvalue, maxvalue])
+                ax[row, col].set_ylim([minvalue, maxvalue])
+                ax[row, col].set_xlabel('$x$')
+                ax[row, col].set_ylabel('$y$')
+                ax[row, col].grid(True)
+                i += 1
+        return ax
 
-def createAxis3d(minvalue, maxvalue, figsize=(10,10)):
+def createAxis3d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
 
-    fig = plt.figure(figsize = figsize)   # figure 크기를 결정
-    ax = fig.gca(projection='3d')
-    ax.set_xlim([minvalue, maxvalue])
-    ax.set_ylim([minvalue, maxvalue])
-    ax.set_zlim([minvalue, maxvalue])
-    ax.set_xlabel('$x$')
-    ax.set_ylabel('$y$')
-    ax.set_zlabel('$z$')
-    ax.grid(True)
-    return ax
+    if subplot == (1,1):
+        fig = plt.figure(figsize = figsize)   # figure 크기를 결정
+        ax = fig.gca(projection='3d')
+        ax.set_xlim([minvalue, maxvalue])
+        ax.set_ylim([minvalue, maxvalue])
+        ax.set_zlim([minvalue, maxvalue])
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$y$')
+        ax.set_zlabel('$z$')
+        ax.grid(True)
+        return ax
+    else:
+        fig, ax = plt.subplots(subplot[0], subplot[1], figsize = figsize)   # figure 크기를 결정
+        i = 1
+        for row in range(subplot[0]):
+            for col in range(subplot[1]):
+                ax[row, col] = fig.add_subplot(subplot[0], subplot[1], i, projection='3d')
+                ax[row, col].set_xlim([minvalue, maxvalue])
+                ax[row, col].set_ylim([minvalue, maxvalue])
+                ax[row, col].set_zlim([minvalue, maxvalue])
+                ax[row, col].set_xlabel('$x$')
+                ax[row, col].set_ylabel('$y$')
+                ax[row, col].set_zlabel('$z$')
+                ax[row, col].grid(True)
+                i+=1
+        return ax
+
