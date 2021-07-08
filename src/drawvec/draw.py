@@ -59,7 +59,8 @@ def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10),
     if dim == 2:
         s = np.array([start[0], start[1]], dtype=float)
         if axis == None:
-            ax = createAxis2d(-maxvalue, maxvalue, figsize)
+            ax = createAxis2d(-maxvalue, maxvalue,  figsize = figsize)
+            print(ax)
         else:
             ax = axis
         for v, c in zip(vector_list, colors):
@@ -72,8 +73,8 @@ def draw_vectors(vector_list, start = (0,0,0), color_list = [], figsize=(10,10),
     if dim == 3:
         s = np.array([start[0], start[1], start[2]], dtype=float)
         if axis == None:
-            ax = createAxis3d(-maxvalue, maxvalue, figsize)
-
+            ax = createAxis3d(-maxvalue, maxvalue,  figsize = figsize)
+            print(ax)
         else:
             ax = axis
         for v, c in zip(vector_list, colors):
@@ -104,13 +105,14 @@ def draw_matrix(mat, figsize=(10, 10), axis = None):
     
     if dim == 2:
         if axis == None:
-            ax = createAxis2d(-maxvalue, maxvalue, figsize)
+            ax = createAxis2d(-maxvalue, maxvalue, figsize = figsize)
         else:
             ax = axis
         u = vectors[0]
         v = vectors[1]
-        for vec, c in zip(vectors, colors):            
+        for vec, c in zip(vectors, colors):
             draw_vector(ax, vec, color=c, start=(0,0))
+
         vectors = [-u,-v]
         for vec, c in zip(vectors, colors):
             draw_vector(ax, vec, start=u+v, color='gray', ls='--', headsize=0)
@@ -118,7 +120,7 @@ def draw_matrix(mat, figsize=(10, 10), axis = None):
         
     if dim == 3:
         if axis == None:
-            ax = createAxis3d(-maxvalue, maxvalue, figsize)
+            ax = createAxis3d(-maxvalue, maxvalue,  figsize = figsize)
         else:
             ax = axis
         u = vectors[0]
@@ -139,6 +141,53 @@ def draw_matrix(mat, figsize=(10, 10), axis = None):
         if axis==None: plt.show()
 
 
+def draw_points(mat, figsize=(10, 10), color='k', ls='-', axis=None):
+
+    dim = mat.shape[0]
+
+    flatten_numbers = np.array(mat).flatten()
+    minvalue = flatten_numbers.min()
+    maxvalue = flatten_numbers.max()
+    d = maxvalue - minvalue
+    minvalue -= d * 0.25
+    maxvalue += d * 0.25
+
+    if dim == 2:
+        if axis == None:
+            ax = createAxis2d(-maxvalue, maxvalue, figsize=figsize)
+        else:
+            ax = axis
+
+        ax.plot(mat[0,:], mat[1,:], color=color, ls=ls)
+        if axis == None: plt.show()
+
+    if dim == 3:
+        if axis == None:
+            ax = createAxis3d(-maxvalue, maxvalue, figsize=figsize)
+        else:
+            ax = axis
+        ax.plot(mat[0,:], mat[1,:], mat[2, :], color=color, ls=ls)
+        if axis == None: plt.show()
+
+def draw_line(a, b, c, axis, ls = '-', color=None): # draw line: ax + by + c = 0
+    if math.fabs(b) > 1e-5 :
+        y = - (c / b)
+        dir = np.array([1, -a / b])
+        if math.fabs(a) > 1e-5:
+            x = - (c + b*y) / a
+        else:
+            x = 0.0
+    else:
+        y = 0.0
+        x = - (c / a)
+        dir = np.array([0, 1])
+
+    p = np.array([x, y])
+    p0 = p - dir * 10000
+    p1 = p + dir* 10000
+    axis.plot([p0[0], p1[0]], [p0[1], p1[1]], ls = ls, color=color)
+
+
 def createAxis2d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
 
     if subplot == (1,1):
@@ -149,9 +198,8 @@ def createAxis2d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
         ax.set_ylabel('$y$')
         ax.grid(True)
         return ax
-    else:
+    elif subplot[0] > 1 and subplot[1] > 1:
         fig, ax = plt.subplots(subplot[0], subplot[1], figsize=figsize)  # figure 크기를 결정
-        i = 1
         for row in range(subplot[0]):
             for col in range(subplot[1]):
                 ax[row, col].set_xlim([minvalue, maxvalue])
@@ -159,8 +207,18 @@ def createAxis2d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
                 ax[row, col].set_xlabel('$x$')
                 ax[row, col].set_ylabel('$y$')
                 ax[row, col].grid(True)
-                i += 1
         return ax
+    else:
+        dim = max(subplot[0], subplot[1])
+        fig, ax = plt.subplots(subplot[0], subplot[1], figsize=figsize)  # figure 크기를 결정
+        for d in range(dim):
+            ax[d].set_xlim([minvalue, maxvalue])
+            ax[d].set_ylim([minvalue, maxvalue])
+            ax[d].set_xlabel('$x$')
+            ax[d].set_ylabel('$y$')
+            ax[d].grid(True)
+        return ax
+
 
 def createAxis3d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
 
@@ -175,7 +233,7 @@ def createAxis3d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
         ax.set_zlabel('$z$')
         ax.grid(True)
         return ax
-    else:
+    elif subplot[0] > 1 and subplot[1] > 1:
         fig, ax = plt.subplots(subplot[0], subplot[1], figsize = figsize)   # figure 크기를 결정
         i = 1
         for row in range(subplot[0]):
@@ -190,4 +248,20 @@ def createAxis3d(minvalue, maxvalue, subplot=(1,1), figsize=(10,10)):
                 ax[row, col].grid(True)
                 i+=1
         return ax
+    else:
+        dim = max(subplot[0], subplot[1])
+        fig, ax = plt.subplots(subplot[0], subplot[1], figsize=figsize)  # figure 크기를 결정
+        i = 1
+        for d in range(dim):
+            ax[d] = fig.add_subplot(subplot[0], subplot[1], i, projection='3d')
+            ax[d].set_xlim([minvalue, maxvalue])
+            ax[d].set_ylim([minvalue, maxvalue])
+            ax[d].set_zlim([minvalue, maxvalue])
+            ax[d].set_xlabel('$x$')
+            ax[d].set_ylabel('$y$')
+            ax[d].set_zlabel('$z$')
+            ax[d].grid(True)
+            i += 1
+        return ax
+
 

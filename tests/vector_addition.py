@@ -10,53 +10,25 @@ spec.loader.exec_module(draw)
 ## When Installed, import can be done as follows:
 # from drawvec import draw
 
-
-dim = 2
-
-u = np.array( np.random.randn(dim)*2)
-v = np.array( np.random.randn(dim)*2)
-w = np.array( np.random.randn(dim)*2)
-
-draw.draw_vectors([u, v, w], color_list=['r', 'g', 'b' ], linked=True)
-
-draw.draw_vectors([u + v + w], color_list=['k'], linked=True)
-
-u = np.array([1.0, 3.2, 0])
-v = np.array([-1.0, 0.7, 2])
-w = np.array([-1.0, -6.0, 0.3])
-draw.draw_vectors([u, v, w], color_list=['r', 'g', 'b' ])
-draw.draw_vectors([u, v, w, 2*u, 2*v, w/2, 3*u, 3*v,
-                   w/3, 4*u, 4*v, w/4], color_list=['r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b' ])
+A = np.array([[2, 1],
+              [0, 3],])
+B = np.array([[2, 1],
+              [1, 2],])
+s = 1.5
+ax = draw.createAxis2d(-1, 6, subplot=(1,4), figsize=(20,10))
+draw.draw_matrix(  A, axis = ax[0])
+draw.draw_matrix(s*A, axis = ax[1])
+draw.draw_matrix(  B, axis = ax[2])
+draw.draw_matrix(s*B, axis = ax[3])
+plt.show()              # 모두 화면에 나타나게 함
 
 
-ax = draw.createAxis3d(-8, 8, figsize=(5,5))
+A = np.array([[2, 1, 0],
+              [0, 3, 1],
+              [0, 1, 3],])
 
-draw.draw_vectors([u, v, w], color_list=['r', 'g', 'b' ], axis = ax)
-draw.draw_vectors([u, v, w, 2*u, 2*v, w/2, 3*u, 3*v,
-                   w/3, 4*u, 4*v, w/4], color_list=['r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b', 'r', 'g', 'b' ], axis=ax)
-
-draw.draw_line(ax, [0,0,0], [5, 5, 0], ls=':')
-
+s = 2
+ax = draw.createAxis3d(-1, 8, subplot=(1,2), figsize=(20,10))
+draw.draw_matrix(  A, axis = ax[0])
+draw.draw_matrix(s*A, axis = ax[1])
 plt.show()
-
-
-ax = draw.createAxis2d(-1.1, 7, figsize=(15,5))
-
-n_steps = 100
-step = 3.141592*2/n_steps
-ax.set_xlabel('$theta$')
-
-xs = []
-ys = []
-x = 0
-for _ in range(n_steps):
-
-    y = math.cos(x)
-    xs.append(x)
-    ys.append(y)
-    x += step
-
-ax.plot(xs, ys)
-
-plt.show()
-
