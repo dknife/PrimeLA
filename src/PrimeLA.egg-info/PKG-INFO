@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: PrimeLA
+Version: 0.1.2
+Summary: A small linear algebra visualization package
+Home-page: https://github.com/dknife/PrimeLA
+Author: dknife
+Author-email: young.min.kang@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/dknife/PrimeLA
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+#PrimeLA
+### Visualization Package for 'Prime Linear Algebra'
+### '으뜸 선형대수'를 위한 가시화 패키지
+
+This is a simple preliminary package 
+for visualizing the vectors (2d and 3d) and matrix (2x2, 3x3)
+
+[GitHub Repository](https://github.com/dknife/PrimeLA)
+
+Author: Young-Min Kang (c) 2021
+
+
+

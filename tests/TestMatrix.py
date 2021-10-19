@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("draw", "../src/drawvec/draw.py")
-draw = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(draw)
+import sys
+sys.path.insert(0, 'src')
+from drawvec import draw
 
 I2 = np.eye(2)
 I3 = np.eye(3)

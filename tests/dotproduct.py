@@ -1,14 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("draw", "../src/drawvec/draw.py")
-draw = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(draw)
-
-## When Installed, import can be done as follows:
-# from drawvec import draw
-
+import sys
+sys.path.insert(0, 'src')
+from drawvec import draw
 
 u = np.array([7.5, -1.2])
 v = np.array([3.0, 3.7])

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="PrimeLA",
-    version="0.1.0",
+    version="0.1.2",
     author="dknife",
     author_email="young.min.kang@gmail.com",
     description="A small linear algebra visualization package",
