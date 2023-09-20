@@ -9,29 +9,36 @@ for visualizing the vectors (2d and 3d) and matrix (2x2, 3x3)
 
 Author: Young-Min Kang (c) 2021
 
-Python Package Distribution
+
+### Python Package Distribution
+
 Dknife Kang
-Prepare Files for Package
 
-Package_Dir
-src/
-example_package/
-__init__.py
-example.py
-tests/
-LINCENSE
-README.md
-pyproject.toml
-setup.py
+#### Prepare Files for Package
 
-Contents of Files
+##### Package_Dir
 
-<example.py>
+* src/
+* example_package/
+* __init__.py
+* example.py
+* tests/
+* LINCENSE
+* README.md
+* pyproject.toml
+* setup.py
+
+##### Contents of Files
+
+###### example.py
+<pre>
 def add_one(number):
+
     return number + 1
+</pre>
 
-
-<setup.py>
+###### setup.py
+<pre>
 import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -58,47 +65,60 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
 )
+</pre>
 
-<pyproject.toml>
+###### pyproject.toml
+<pre>
 [build-system]
 requires = [
     "setuptools>=42",
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+</pre>
 
 
-Build
+#### Build
 
+<pre>
 $ python -m pip install --upgrade pip
 
 $ python -m pip install --upgrade build
 
 $ python -m build
 
-
 $ python -m pip install --upgrade twine
+</pre>
 
-Get a token from TestPyPI 
-of course, you must have a valid id there
+#### Get a token from TestPyPI (or PyPI)
+
+Of course, you must have a valid id there...
+
 https://test.pypi.org/manage/account/#api-tokens,
 
-
-Copy token
+#### Copy token
 
 To use this API token:
+
 Set your username to __token__
+
 Set your password to the token value, including the pypi- prefix
+
 For example, if you are using Twine to upload your projects to PyPI, set up your $HOME/.pypirc file like this:
+
+<pre>
 [testpypi]
   username = __token__
   password = pypi-AgENdGVz**********************************************************************************************************DRw
+</pre>
+
 For further instructions on how to use this token, visit the PyPI help page.
 
-location of .pypirc  / contents
-$HOME ( C:\Windows\Users\youraccount\)
+#### location of .pypirc  / contents
+* $HOME ( C:\Windows\Users\youraccount\)
 
-<.pypirc>
+###### .pypirc
+<pre>
 [distutils]
 index-servers =
     pypi
@@ -111,18 +131,14 @@ password = pypi-AgENdGVzdC5weXBpLm9---------------------------------------------
 [testpypi]
 username = __token__
 password = pypi-AgENdGVzdC5weXBpLm9----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------S-pTn4mDkdtsThauWzSgGGjtE_rMNZEYCsDRw
+</pre>
 
-
-
-
-
-
-upload your package
-
+#### upload your package
+<pre>
 $ python -m twine upload --repository testpypi dist/*
+</pre>
 
 
-
-install your own package and use it everywhere.
+#### install your own package and use it everywhere.
 
 
